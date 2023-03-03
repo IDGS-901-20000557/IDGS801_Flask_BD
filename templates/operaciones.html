@@ -1,0 +1,22 @@
+{%extends "layout.html"%}
+{%block content%}
+  <div>
+    <h1>Resultados para "{{comas}}": </h1><br>
+    <hr>
+
+    <h3>Datos Generales</h3>
+    {%from "_macro.html" import render_simple_text%}
+    {{render_simple_text('promedio', promedio)}}
+    {{render_simple_text('Numero Menor', nMenor)}}
+    {{render_simple_text('Numero Mayor', nMayor)}}
+
+    <hr>
+
+    <h3>Números Repetidos</h3>
+    {%from "_macro.html" import repeat_nums%}
+    {%for rep in repetidos%}
+    {{repeat_nums(rep)}}
+    {%endfor%}
+  </div>
+  <a href="/CajasDinamicas">Volver</a>
+{%endblock%}
