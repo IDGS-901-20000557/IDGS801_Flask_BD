@@ -5,7 +5,12 @@
  
    <div class="container">
     <div class="row">
-        <form name="sent" action="/" id="form1" method="POST">
+        <form name="sent" action="/eliminarAlumno" id="form1" method="POST">
+            <div class="control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{render_field(form.id,class='form-control')}}
+                </div>
+            </div>
             <div class="control-group">
                 <div class="form-group col-xs-12 float-label-form-group controls">
                     {{render_field(form.nombre,class='form-control')}}
@@ -21,8 +26,11 @@
                     {{render_field(form.email,class='form-control')}}
                 </div>
             </div>
-            <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
-            <input type="submit" id="reg-alum" name="registra" value="Registrar"/>
+            <input type="submit" class="btn btn-danger" id="eliminar" 
+            name="eliminar" value="Eliminar"/>
+            <a href="ABCompleto" class="btn btn-success">
+                <i class="icon-undo icon-white"></i>Regresar
+            </a>
         </form>
     </div>
    </div>

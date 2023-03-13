@@ -9,3 +9,10 @@ class UserForm(Form):
     apellidos=StringField('apellidos')
     email=EmailField('correo')
     
+class UserFormMaestro(Form):
+    id=IntegerField('id')
+    nombre=StringField('nombre')
+    apellidom=StringField('apellidom')
+    apellidop=StringField('apellidop')
+    email=EmailField('correo')
+    
