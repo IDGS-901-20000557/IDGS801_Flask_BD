@@ -4,33 +4,78 @@
 
 {% from "_macros.html" import render_field %}
 <div style="margin-bottom: 10px;">
-    <div >
+    <div class="text-center">
         <img src="../static/img/resistenciatab.png">
     </div>
     <div >
-        <div class="text-center">
-            <h2>Calculadora de Resistencias</h2>
-        </div>
-        <form action="" method="POST" novalidate>
-            {{form.csrf_token}}
-            <div class="row">
+        <form action="" method="POST" novalidate >
+    
+            <div class="row" >
                 <div class="span3">
                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                     <div class="control-group">
-                        {{render_field(form.banda1)}}
-                        {{render_field(form.banda2)}}
-                        {{render_field(form.banda3)}}
+                        <label for="selectPrimer">Primera banda:</label>
+                        <select name="selectPrimer" id="selectPrimer">
+                            <option value="black">Negro</option>
+                            <option value="brown">Café</option>
+                            <option value="red">Rojo</option>
+                            <option value="orange">Naranja</option>
+                            <option value="yellow">Amarillo</option>
+                            <option value="green">Verde</option>
+                            <option value="blue">Azul</option>
+                            <option value="purple">Violeta</option>
+                            <option value="grey">Gris</option>
+                            <option value="white">Blanco</option>
+                        </select>
+                        <label for="selectSeg">Segunda banda:</label>
+                        <select name="selectSeg" id="selectSeg">
+                            <option value="black">Negro</option>
+                            <option value="brown">Café</option>
+                            <option value="red">Rojo</option>
+                            <option value="orange">Naranja</option>
+                            <option value="yellow">Amarillo</option>
+                            <option value="green">Verde</option>
+                            <option value="blue">Azul</option>
+                            <option value="purple">Violeta</option>
+                            <option value="grey">Gris</option>
+                            <option value="white">Blanco</option>
+                         
+
+                        </select>
+                        <label for="selectTer">Tercer banda:</label>
+                        <select name="selectTer" id="selectTer">
+                            <option value="black">Negro</option>
+                            <option value="brown">Café</option>
+                            <option value="red">Rojo</option>
+                            <option value="orange">Naranja</option>
+                            <option value="yellow">Amarillo</option>
+                            <option value="green">Verde</option>
+                            <option value="blue">Azul</option>
+                            <option value="purple">Violeta</option>
+                            <option value="grey">Gris</option>
+                            <option value="white">Blanco</option>
+                         
+
+                        </select>
                     </div>
                 </div>
                 <div class="span3">
-                    {{render_field(form.tolerancia)}}
+                    <div class="controls">
+                        <label class="w3-text-teal" for="tolerancia">Tolerancias</label>
+                      
+                    <input checked="" id="tolerancia-0" name="tolerancia" required="" type="radio" value="gold"> 
+                    <label for="tolerancia-0">ORO 5%</label>
+
+                    <input id="tolerancia-1" name="tolerancia" required="" type="radio" value="silver"> 
+                    <label for="tolerancia-1">PLATA 10%</label>
+                    </div>
                 </div>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-success" style="margin-right: 10px;" name="btnAgregar" value="btnAgregar">
+                <button type="submit" class="btn" style="margin-right: 10px;" name="btnAgregar" value="btnAgregar">
                     Guardar
                 </button>
-                <button type="submit" class="btn btn-warning" style="margin-left: 10px;" name="btnLeerArchivo" value="btnLeerArchivo">
+                <button type="submit" class="btn " style="margin-left: 10px;" name="btnLeerArchivo" value="btnLeerArchivo">
                     Leer Archivo
                 </button>
             </div>
@@ -39,9 +84,9 @@
 </div>
 
 <div class="row">
-    <div class="span12" {% if not mostrarTabla %}style="display:none" {% endif %}>
+    <div class="span12">
         <table class="table text-center" style="border: 1px solid black;">
-            <thead>
+            <thead style="background-color: blue; color: aliceblue;">
                 <tr style="border: 1px solid black;">
                     <th style="border: 1px solid black; text-align: center;">Primera Banda</th>
                     <th style="border: 1px solid black; text-align: center;">Segunda Banda</th>
@@ -53,17 +98,15 @@
                 </tr>
             </thead>
             <tbody>
-                {% for n in range(cantidadLineas) %}
                 <tr>
-                    <td style="border: 1px solid black;" bgcolor="{{valorHexBanda1[n]}}"></td>
-                    <td style="border: 1px solid black;" bgcolor="{{valorHexBanda2[n]}}"></td>
-                    <td style="border: 1px solid black;" bgcolor="{{valorHexBandaMulti[n]}}"></td>
-                    <td style="border: 1px solid black;" bgcolor="{{valorHexTolerancia[n]}}"></td>
-                    <td style="text-align: center; border: 1px solid black;">{{valorResistencia[n]}} Ω</td>
-                    <td style="text-align: center; border: 1px solid black;">{{maxValor[n]}} Ω</td>
-                    <td style="text-align: center; border: 1px solid black;">{{minValor[n]}} Ω</td>
+                    <td style="border: 1px solid black;" bgcolor="{{valorHexBanda1}}"></td>
+                    <td style="border: 1px solid black;" bgcolor="{{valorHexBanda2}}"></td>
+                    <td style="border: 1px solid black;" bgcolor="{{valorHexBanda3}}"></td>
+                    <td style="border: 1px solid black;" bgcolor="{{valorHexTolerancia}}"></td>
+                    <td style="text-align: center; border: 1px solid black;">{{valorResistencia}} Ω</td>
+                    <td style="text-align: center; border: 1px solid black;">{{maxValor}} Ω</td>
+                    <td style="text-align: center; border: 1px solid black;">{{minValor}} Ω</td>
                 </tr>
-                {% endfor %}
             </tbody>
         </table>
     </div>

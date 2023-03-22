@@ -1,5 +1,1 @@
-red,black,black,gold
-yellow,orange,black,silver
-blue,orange,gray,gold
-green,red,black,silver
-brown,yellow,orange,gold
+brown,blue,grey,silver

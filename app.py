@@ -84,112 +84,77 @@ def eliminar():
 
 @app.route('/resistencias', methods=['GET', 'POST'])
 def resistencias():
-    reg_resistencias = forms.FormResistencias(request.form)
-    btnAgregar = request.form.get('btnAgregar')
-    btnLeerArchivo = request.form.get('btnLeerArchivo')
-    mostrarTabla = False
-    coloresBanda = {"0": "black", "1": "brown", "2": "red", "3": "orange", "4": "yellow", "5": "green", "6": "blue",
-                    "7": "purple", "8": "gray", "9": "white"}
-    coloresBandaMultiplicadora = {"1": "black", "10": "brown", "100": "red", "1000": "orange", "10000": "yellow", "100000": "green",
-                                  "1000000": "blue", "10000000": "purple", "100000000": "gray", "1000000000": "white"}
-    coloresTolerancia = {"gold": "gold", "silver": "silver"}
-    valoresTolerancia = {"gold": "5", "silver": "10"}
-    seleccionBanda1 = ""
-    seleccionBanda2 = ""
-    seleccionBandaMulti = ""
-    seleccionTolerancia = ""
-    valorHexBanda1 = []
-    valorHexBanda2 = []
-    valorHexBandaMulti = []
-    valorHexTolerancia = []
-    valorResistencia = []
-    tolerancia = []
-    maxValor = []
-    minValor = []
-    cantidadLineas = 0
-    lineas = 0
 
-    if (request.method == "POST" and reg_resistencias.validate()):
-        if (btnAgregar == "btnAgregar"):
-            seleccionBanda1 = reg_resistencias.banda1.data
-            seleccionBanda2 = reg_resistencias.banda2.data
-            seleccionBandaMulti = reg_resistencias.banda3.data
-            seleccionTolerancia = reg_resistencias.tolerancia.data
+    #Valores que se devuelven para la tabla, deben ser inicializados
+    valorHexBanda1= ""
+    valorHexBanda2= ""
+    valorHexBanda3=""
+    valorHexTolerancia= ""
+    valorResistencia=""
+    maxValor=""
+    minValor=""
 
-            with open('resistencias.txt', 'a') as f:
-                f.write(f'{coloresBanda[seleccionBanda1]},{coloresBanda[seleccionBanda2]},{coloresBandaMultiplicadora[seleccionBandaMulti]},{coloresTolerancia[seleccionTolerancia]}\n')
+    if (request.method == "POST"):
+        """ Guardar en el txt """
+        seleccionBanda1 = request.form.get('selectPrimer')
+        seleccionBanda2 = request.form.get('selectSeg')
+        seleccionBandaMulti = request.form.get('selectTer')
+        print("pa"*500)
+        print(request.form.get('tolerancia'))
+        seleccionTolerancia = request.form.get('tolerancia')
 
-        if (btnLeerArchivo == "btnLeerArchivo"):
-            mostrarTabla = True
-            archivo = open('resistencias.txt', 'r')
-            datos = archivo.readlines()
-            lineas = []
-            valBanda1 = []
-            valBanda2 = []
-            valBanda3 = []
-            valTolerancias = []
+        with open('resistencias.txt', 'w') as f:
+                f.write(seleccionBanda1+','+seleccionBanda2+','+seleccionBandaMulti+','+seleccionTolerancia)  
 
-            for n in datos:
-                lineas.append(n.replace('\n', '')) 
+        """ Mostrar Tabla """
+        archivo = open('resistencias.txt', 'r')
+        datos = archivo.readline()
 
-            cantidadLineas = len(lineas)
+        print(datos)
+        array = datos.split(',')
+        valorHexBanda1= array[0]
+        valorHexBanda2= array[1]
+        valorHexBanda3= array[2]
+        valorHexTolerancia= array[3]
+        
+        #Generamos las operaciones
+        coloresBanda = {"0": "black", "1": "brown", "2": "red", "3": "orange", "4": "yellow", "5": "green", "6": "blue",
+                    "7": "purple", "8": "grey", "9": "white"}
+        coloresBandaMultiplicadora = {"1": "black", "10": "brown", "100": "red", "1000": "orange", "10000": "yellow", "100000": "green",
+                                  "1000000": "blue", "10000000": "purple", "100000000": "grey", "1000000000": "white"}
+        primerNum=""
+        segundoNum=""
+        multiplicador=""
+        #Recorremos el diccionario de datos para verificar nuestro valor de resistencia
+        for elemento in coloresBanda:
+           if valorHexBanda1==coloresBanda[elemento]:
+               primerNum=elemento
+           if valorHexBanda2==coloresBanda[elemento]:
+               segundoNum=elemento
 
-            for color in lineas:
-                elemento1 = color.split(',')[0].strip()
-                elemento2 = color.split(',')[1].strip()
-                elemento3 = color.split(',')[2].strip()
-                elemento4 = color.split(',')[3].strip()
-                valorHexBanda1.append(elemento1)
-                valorHexBanda2.append(elemento2)
-                valorHexBandaMulti.append(elemento3)
-                valorHexTolerancia.append(elemento4)
+        #Recorremos el diccionario de datos del multiplicador
+        for elemento in coloresBandaMultiplicadora:
+           print(elemento, '->', coloresBandaMultiplicadora[elemento])
+           if valorHexBanda3==coloresBandaMultiplicadora[elemento]:
+               multiplicador=elemento
 
-            for color in valorHexBanda1:
-                for clave, valor in coloresBanda.items():
-                    if valor == color:
-                        valBanda1.append(clave)
+        numeroTotal=primerNum+segundoNum
+        print(multiplicador)
+        valorResistencia=int(numeroTotal)*int(multiplicador)
+        
+        if valorHexTolerancia=="gold":
+            maxValor=valorResistencia*1.05
+            minValor=valorResistencia-(valorResistencia*.05)
+        elif valorHexTolerancia=="silver":
+            maxValor=valorResistencia*1.10
+            minValor=valorResistencia-(valorResistencia*.10)
 
-            for color in valorHexBanda2:
-                for clave, valor in coloresBanda.items():
-                    if valor == color:
-                        valBanda2.append(clave)
 
-            for color in valorHexBandaMulti:
-                for clave, valor in coloresBandaMultiplicadora.items():
-                    if valor == color:
-                        valBanda3.append(clave)
+        
 
-            for clave in valorHexTolerancia:
-                valTolerancias.append(valoresTolerancia[clave])
-
-            for n in range(cantidadLineas):
-                valorResistencia.append(int(valBanda1[n] + valBanda2[n]) * int(valBanda3[n]))
-                tolerancia.append(valorResistencia[n] * (int(valTolerancias[n]) / 100))
-                maxValor.append(valorResistencia[n] + tolerancia[n])
-                minValor.append(valorResistencia[n] - tolerancia[n])
-
-                if (valorResistencia[n] >= 1000 and valorResistencia[n] < 1000000):
-                    valorResistencia[n] = "{}k ".format(str(valorResistencia[n] / 1000))
-                    maxValor[n] = "{}k ".format(str(maxValor[n] / 1000))
-                    minValor[n] = "{}k ".format(str(minValor[n] / 1000))
-
-                elif (valorResistencia[n] >= 1000000 and valorResistencia[n] < 1000000000):
-                    valorResistencia[n] = "{}M ".format(str(valorResistencia[n] / 1000000))
-                    maxValor[n] = "{}M ".format(str(maxValor[n] / 1000000))
-                    minValor[n] = "{}M ".format(str(minValor[n] / 1000000))
-
-                elif(valorResistencia[n] >= 1000000000):
-                    valorResistencia[n] = "{}G ".format(str(valorResistencia[n] / 1000000000))
-                    maxValor[n] = "{}G ".format(str(maxValor[n] / 1000000000))
-                    minValor[n] = "{}G ".format(str(minValor[n] / 1000000000)) 
-                
-
-    response = make_response(render_template('resistencias.html', form = reg_resistencias, valorHexBanda1 = valorHexBanda1, valorHexBanda2 = valorHexBanda2, 
-                                             valorHexBandaMulti = valorHexBandaMulti, valorHexTolerancia = valorHexTolerancia, valorResistencia = valorResistencia,
-                                             maxValor = maxValor, minValor = minValor, cantidadLineas = cantidadLineas, mostrarTabla = mostrarTabla))
-    response.set_cookie('valorResistencia', str(valorResistencia))
-    response.set_cookie('maxValor', str(maxValor))
-    response.set_cookie('minValor', str(minValor))
+    response = make_response(render_template('resistencias.html', valorHexBanda1 = valorHexBanda1, valorHexBanda2 = valorHexBanda2, 
+                                             valorHexBanda3 = valorHexBanda3, valorHexTolerancia = valorHexTolerancia, valorResistencia = valorResistencia,
+                                             maxValor = maxValor, minValor = minValor))
     return response
 
 
